@@ -21,16 +21,21 @@ def clean_csv_file(file_path):
     # Extract only the required columns and rename them
     cleaned_rows = []
     for row in rows:
+        # Determine FTE based on Working Title
+        working_title = row.get('Working Title', row.get('Title', ''))
+        fte = 0.5 if 'part' in working_title.lower() else 1
+
         cleaned_row = {
-            'Full Name': row['Name'],
-            'Working Title': row['Title'],
-            'Annualized Salary': row['Annual Wages']
+            'Full Name': row.get('Full Name', row.get('Name', '')),
+            'Working Title': working_title,
+            'Annualized Salary': row.get('Annualized Salary', row.get('Annual Wages', '')),
+            'FTE': fte
         }
         cleaned_rows.append(cleaned_row)
 
     # Write back to the same file
     with open(file_path, 'w', encoding='utf-8', newline='') as f:
-        fieldnames = ['Full Name', 'Working Title', 'Annualized Salary']
+        fieldnames = ['Full Name', 'Working Title', 'Annualized Salary', 'FTE']
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(cleaned_rows)
