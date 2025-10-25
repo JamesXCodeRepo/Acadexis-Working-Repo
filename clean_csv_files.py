@@ -18,11 +18,18 @@ def clean_csv_file(file_path):
         reader = csv.DictReader(f)
         rows = list(reader)
 
+    original_count = len(rows)
+
     # Extract only the required columns and rename them
     cleaned_rows = []
     for row in rows:
         # Determine FTE based on Working Title
         working_title = row.get('Working Title', row.get('Title', ''))
+
+        # Skip rows where Working Title is empty
+        if not working_title or working_title.strip() == '':
+            continue
+
         fte = 0.5 if 'part' in working_title.lower() else 1
 
         cleaned_row = {
@@ -40,7 +47,11 @@ def clean_csv_file(file_path):
         writer.writeheader()
         writer.writerows(cleaned_rows)
 
-    print(f"✓ Cleaned: {file_path}")
+    removed_count = original_count - len(cleaned_rows)
+    if removed_count > 0:
+        print(f"✓ Cleaned: {file_path} (removed {removed_count} rows with empty Working Title)")
+    else:
+        print(f"✓ Cleaned: {file_path}")
 
 def main():
     """Process all CSV files in the output folder."""
