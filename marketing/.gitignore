@@ -3,6 +3,7 @@ config.ini
 
 # Generated reports
 reports/
+pdf_reports/
 
 # Python virtual environment
 venv/

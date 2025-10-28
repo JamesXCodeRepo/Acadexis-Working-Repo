@@ -1,0 +1,31 @@
+Institution Name,Job Title,Job Family,Min Salary,Q1 Salary,Median Salary,Q3 Salary,Max Salary
+University of California Berkeley,Assistant Professor,Faculty,65000,75000,85000,95000,110000
+University of California Berkeley,Associate Professor,Faculty,85000,95000,105000,115000,135000
+University of California Berkeley,Full Professor,Faculty,105000,125000,145000,165000,195000
+University of California Berkeley,Lecturer,Faculty,55000,62000,68000,75000,85000
+University of California Berkeley,Department Chair,Faculty,120000,140000,160000,180000,210000
+University of California Berkeley,Academic Advisor,Student Services,45000,52000,58000,65000,75000
+University of California Berkeley,Admissions Officer,Student Services,48000,55000,62000,70000,82000
+University of California Berkeley,Financial Aid Counselor,Student Services,50000,58000,65000,73000,85000
+University of California Berkeley,IT Manager,Information Technology,75000,88000,98000,110000,130000
+University of California Berkeley,Systems Administrator,Information Technology,60000,72000,82000,92000,108000
+Stanford University,Assistant Professor,Faculty,70000,82000,92000,103000,120000
+Stanford University,Associate Professor,Faculty,95000,108000,118000,130000,152000
+Stanford University,Full Professor,Faculty,115000,138000,158000,180000,215000
+Stanford University,Lecturer,Faculty,58000,65000,72000,80000,92000
+Stanford University,Department Chair,Faculty,135000,155000,175000,195000,230000
+Stanford University,Academic Advisor,Student Services,48000,55000,62000,70000,82000
+Stanford University,Admissions Officer,Student Services,52000,60000,68000,77000,90000
+Stanford University,Financial Aid Counselor,Student Services,54000,62000,70000,78000,92000
+Stanford University,IT Manager,Information Technology,82000,95000,108000,120000,142000
+Stanford University,Systems Administrator,Information Technology,65000,78000,88000,98000,115000
+MIT,Assistant Professor,Faculty,72000,85000,95000,108000,125000
+MIT,Associate Professor,Faculty,98000,112000,125000,138000,160000
+MIT,Full Professor,Faculty,120000,145000,165000,188000,225000
+MIT,Lecturer,Faculty,60000,68000,75000,83000,95000
+MIT,Department Chair,Faculty,140000,162000,182000,205000,240000
+MIT,Academic Advisor,Student Services,50000,58000,65000,73000,85000
+MIT,Admissions Officer,Student Services,55000,63000,72000,81000,95000
+MIT,Financial Aid Counselor,Student Services,56000,65000,73000,82000,96000
+MIT,IT Manager,Information Technology,85000,100000,112000,125000,148000
+MIT,Systems Administrator,Information Technology,68000,82000,92000,103000,120000
