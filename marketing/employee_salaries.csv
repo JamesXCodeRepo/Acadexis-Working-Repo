@@ -1,0 +1,56 @@
+employee_id,institution_name,institution_type,job_title,job_category,department,salary,hire_date,employment_type,years_of_experience,education_level,location
+1,Stanford University,Private,Professor,Faculty,Computer Science,185000.00,2015-08-15,Full-Time,15,Doctorate,Stanford CA
+2,Stanford University,Private,Professor,Faculty,Computer Science,195000.00,2012-09-01,Full-Time,18,Doctorate,Stanford CA
+3,Stanford University,Private,Associate Professor,Faculty,Computer Science,145000.00,2018-08-20,Full-Time,8,Doctorate,Stanford CA
+4,Stanford University,Private,Assistant Professor,Faculty,Computer Science,125000.00,2020-09-01,Full-Time,3,Doctorate,Stanford CA
+5,Stanford University,Private,Department Chair,Administrative,Computer Science,210000.00,2010-07-01,Full-Time,20,Doctorate,Stanford CA
+6,Stanford University,Private,Lecturer,Faculty,Computer Science,95000.00,2019-01-15,Full-Time,5,Master,Stanford CA
+7,Stanford University,Private,Registrar,Administrative,Academic Affairs,95000.00,2016-03-01,Full-Time,12,Master,Stanford CA
+8,Stanford University,Private,Financial Aid Director,Administrative,Student Services,110000.00,2014-06-01,Full-Time,15,Master,Stanford CA
+9,UC Berkeley,Public,Professor,Faculty,Computer Science,175000.00,2014-08-15,Full-Time,16,Doctorate,Berkeley CA
+10,UC Berkeley,Public,Professor,Faculty,Computer Science,180000.00,2011-09-01,Full-Time,19,Doctorate,Berkeley CA
+11,UC Berkeley,Public,Associate Professor,Faculty,Computer Science,135000.00,2017-08-20,Full-Time,9,Doctorate,Berkeley CA
+12,UC Berkeley,Public,Assistant Professor,Faculty,Computer Science,115000.00,2021-09-01,Full-Time,2,Doctorate,Berkeley CA
+13,UC Berkeley,Public,Lecturer,Faculty,Computer Science,85000.00,2019-01-15,Full-Time,4,Master,Berkeley CA
+14,UC Berkeley,Public,Department Chair,Administrative,Computer Science,195000.00,2009-07-01,Full-Time,22,Doctorate,Berkeley CA
+15,UC Berkeley,Public,Registrar,Administrative,Academic Affairs,88000.00,2017-05-15,Full-Time,10,Master,Berkeley CA
+16,UC Berkeley,Public,Financial Aid Director,Administrative,Student Services,105000.00,2016-08-15,Full-Time,12,Master,Berkeley CA
+17,MIT,Private,Professor,Faculty,Computer Science,190000.00,2013-08-15,Full-Time,17,Doctorate,Cambridge MA
+18,MIT,Private,Professor,Faculty,Computer Science,200000.00,2010-09-01,Full-Time,20,Doctorate,Cambridge MA
+19,MIT,Private,Associate Professor,Faculty,Computer Science,150000.00,2016-08-20,Full-Time,10,Doctorate,Cambridge MA
+20,MIT,Private,Assistant Professor,Faculty,Computer Science,130000.00,2020-09-01,Full-Time,4,Doctorate,Cambridge MA
+21,MIT,Private,Lecturer,Faculty,Computer Science,100000.00,2018-01-15,Full-Time,6,Master,Cambridge MA
+22,MIT,Private,Department Chair,Administrative,Computer Science,220000.00,2008-07-01,Full-Time,24,Doctorate,Cambridge MA
+23,MIT,Private,Registrar,Administrative,Academic Affairs,98000.00,2015-02-01,Full-Time,14,Master,Cambridge MA
+24,MIT,Private,Financial Aid Director,Administrative,Student Services,115000.00,2013-07-01,Full-Time,17,Master,Cambridge MA
+25,Harvard University,Private,Professor,Faculty,Computer Science,195000.00,2012-09-01,Full-Time,19,Doctorate,Cambridge MA
+26,Harvard University,Private,Associate Professor,Faculty,Computer Science,155000.00,2016-08-15,Full-Time,11,Doctorate,Cambridge MA
+27,Harvard University,Private,Assistant Professor,Faculty,Computer Science,135000.00,2020-09-01,Full-Time,5,Doctorate,Cambridge MA
+28,Harvard University,Private,Department Chair,Administrative,Computer Science,225000.00,2009-07-01,Full-Time,23,Doctorate,Cambridge MA
+29,Harvard University,Private,Lecturer,Faculty,Computer Science,105000.00,2018-06-01,Full-Time,7,Master,Cambridge MA
+30,Harvard University,Private,Registrar,Administrative,Academic Affairs,102000.00,2016-04-01,Full-Time,13,Master,Cambridge MA
+31,Harvard University,Private,Financial Aid Director,Administrative,Student Services,120000.00,2014-09-01,Full-Time,16,Master,Cambridge MA
+32,Yale University,Private,Professor,Faculty,Economics,188000.00,2011-08-20,Full-Time,20,Doctorate,New Haven CT
+33,Yale University,Private,Professor,Faculty,Economics,192000.00,2010-09-01,Full-Time,22,Doctorate,New Haven CT
+34,Yale University,Private,Associate Professor,Faculty,Economics,148000.00,2017-08-15,Full-Time,10,Doctorate,New Haven CT
+35,Yale University,Private,Assistant Professor,Faculty,Economics,128000.00,2021-09-01,Full-Time,4,Doctorate,New Haven CT
+36,Yale University,Private,Department Chair,Administrative,Economics,215000.00,2008-07-01,Full-Time,25,Doctorate,New Haven CT
+37,Yale University,Private,Lecturer,Faculty,Economics,98000.00,2019-01-15,Full-Time,6,Master,New Haven CT
+38,Yale University,Private,Registrar,Administrative,Academic Affairs,96000.00,2015-03-01,Full-Time,12,Master,New Haven CT
+39,Yale University,Private,Financial Aid Director,Administrative,Student Services,112000.00,2013-08-01,Full-Time,15,Master,New Haven CT
+40,Columbia University,Private,Professor,Faculty,Engineering,198000.00,2012-08-15,Full-Time,18,Doctorate,New York NY
+41,Columbia University,Private,Professor,Faculty,Engineering,205000.00,2010-09-01,Full-Time,21,Doctorate,New York NY
+42,Columbia University,Private,Associate Professor,Faculty,Engineering,158000.00,2016-08-20,Full-Time,11,Doctorate,New York NY
+43,Columbia University,Private,Assistant Professor,Faculty,Engineering,138000.00,2020-09-01,Full-Time,5,Doctorate,New York NY
+44,Columbia University,Private,Department Chair,Administrative,Engineering,230000.00,2008-07-01,Full-Time,24,Doctorate,New York NY
+45,Columbia University,Private,Lecturer,Faculty,Engineering,108000.00,2018-01-15,Full-Time,7,Master,New York NY
+46,Columbia University,Private,Registrar,Administrative,Academic Affairs,105000.00,2015-05-01,Full-Time,13,Master,New York NY
+47,Columbia University,Private,Financial Aid Director,Administrative,Student Services,125000.00,2013-09-01,Full-Time,16,Master,New York NY
+48,UCLA,Public,Professor,Faculty,Biology,172000.00,2013-08-15,Full-Time,17,Doctorate,Los Angeles CA
+49,UCLA,Public,Professor,Faculty,Biology,178000.00,2011-09-01,Full-Time,19,Doctorate,Los Angeles CA
+50,UCLA,Public,Associate Professor,Faculty,Biology,132000.00,2017-08-20,Full-Time,9,Doctorate,Los Angeles CA
+51,UCLA,Public,Assistant Professor,Faculty,Biology,112000.00,2021-09-01,Full-Time,3,Doctorate,Los Angeles CA
+52,UCLA,Public,Lecturer,Faculty,Biology,82000.00,2019-01-15,Full-Time,5,Master,Los Angeles CA
+53,UCLA,Public,Department Chair,Administrative,Biology,192000.00,2009-07-01,Full-Time,21,Doctorate,Los Angeles CA
+54,UCLA,Public,Registrar,Administrative,Academic Affairs,90000.00,2016-06-01,Full-Time,11,Master,Los Angeles CA
+55,UCLA,Public,Financial Aid Director,Administrative,Student Services,108000.00,2014-08-01,Full-Time,14,Master,Los Angeles CA

@@ -1,0 +1,19 @@
+# Configuration file with credentials
+config.ini
+
+# Generated reports
+reports/
+
+# Python virtual environment
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
