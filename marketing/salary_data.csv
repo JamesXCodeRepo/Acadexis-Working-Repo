@@ -1,0 +1,37 @@
+institution_name,job_title,job_family,min_salary,q1_salary,median_salary,q3_salary,max_salary,sample_size
+University of California Berkeley,Assistant Professor,Faculty,75000,82000,89000,95000,105000,45
+University of California Berkeley,Associate Professor,Faculty,95000,105000,115000,125000,140000,38
+University of California Berkeley,Full Professor,Faculty,125000,145000,165000,185000,220000,52
+University of California Berkeley,Lecturer,Faculty,55000,62000,68000,74000,85000,28
+University of California Berkeley,Department Chair,Faculty,140000,155000,170000,185000,210000,15
+University of California Berkeley,Academic Advisor,Student Services,45000,52000,58000,64000,72000,35
+University of California Berkeley,Student Services Manager,Student Services,65000,72000,78000,85000,95000,22
+University of California Berkeley,Director of Student Services,Student Services,85000,95000,105000,115000,130000,12
+University of California Berkeley,Administrative Assistant,Administrative,38000,42000,46000,50000,58000,48
+University of California Berkeley,Senior Administrator,Administrative,58000,65000,72000,79000,88000,30
+University of California Berkeley,IT Support Specialist,Technology,52000,58000,65000,72000,82000,25
+University of California Berkeley,Senior IT Manager,Technology,85000,95000,105000,115000,130000,18
+Stanford University,Assistant Professor,Faculty,82000,90000,98000,106000,118000,42
+Stanford University,Associate Professor,Faculty,105000,118000,130000,142000,165000,36
+Stanford University,Full Professor,Faculty,145000,168000,190000,212000,255000,48
+Stanford University,Lecturer,Faculty,60000,68000,75000,82000,95000,24
+Stanford University,Department Chair,Faculty,155000,175000,195000,215000,245000,14
+Stanford University,Academic Advisor,Student Services,48000,55000,62000,69000,78000,32
+Stanford University,Student Services Manager,Student Services,70000,78000,85000,92000,105000,20
+Stanford University,Director of Student Services,Student Services,92000,105000,118000,130000,148000,10
+Stanford University,Administrative Assistant,Administrative,42000,46000,50000,54000,62000,45
+Stanford University,Senior Administrator,Administrative,62000,70000,78000,86000,96000,28
+Stanford University,IT Support Specialist,Technology,56000,63000,70000,77000,88000,22
+Stanford University,Senior IT Manager,Technology,92000,105000,118000,130000,148000,16
+MIT,Assistant Professor,Faculty,80000,88000,95000,102000,115000,40
+MIT,Associate Professor,Faculty,100000,112000,125000,138000,160000,35
+MIT,Full Professor,Faculty,135000,160000,180000,200000,240000,50
+MIT,Lecturer,Faculty,58000,65000,72000,79000,90000,26
+MIT,Department Chair,Faculty,150000,168000,185000,202000,230000,13
+MIT,Academic Advisor,Student Services,47000,54000,60000,66000,75000,30
+MIT,Student Services Manager,Student Services,68000,76000,82000,88000,100000,19
+MIT,Director of Student Services,Student Services,88000,100000,112000,124000,140000,11
+MIT,Administrative Assistant,Administrative,40000,44000,48000,52000,60000,42
+MIT,Senior Administrator,Administrative,60000,68000,75000,82000,92000,26
+MIT,IT Support Specialist,Technology,54000,61000,68000,75000,85000,24
+MIT,Senior IT Manager,Technology,88000,100000,112000,124000,142000,17
