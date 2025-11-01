@@ -1,2 +1,3 @@
 # Ignore output folder containing CSV files
 output/
+marketing/salary_reports/
