@@ -1,0 +1,26 @@
+unitid,school,state,enrollment,enrollment_category,employee_count,median_salary,state_median_salary,percent_diff_from_state_category
+100654,University of Alabama,AL,32000,Large (20k+ Enrollment),125,95000.00,88000.00,7.95
+100663,Auburn University,AL,24500,Large (20k+ Enrollment),98,92000.00,88000.00,4.55
+100690,Alabama State University,AL,4800,Small (<5k Enrollment),45,72000.00,68000.00,5.88
+100724,University of Alaska Fairbanks,AK,8500,Medium (5k–20k Enrollment),62,78000.00,75000.00,4.00
+100751,University of Alaska Anchorage,AK,15000,Medium (5k–20k Enrollment),87,79000.00,75000.00,5.33
+100830,Arizona State University,AZ,55000,Large (20k+ Enrollment),285,102000.00,95000.00,7.37
+100858,University of Arizona,AZ,45000,Large (20k+ Enrollment),198,98000.00,95000.00,3.16
+100937,Northern Arizona University,AZ,18000,Medium (5k–20k Enrollment),112,82000.00,80000.00,2.50
+101028,University of Arkansas,AR,28000,Large (20k+ Enrollment),145,87000.00,83000.00,4.82
+101116,Arkansas State University,AR,12000,Medium (5k–20k Enrollment),76,74000.00,71000.00,4.23
+110404,University of California-Berkeley,CA,42000,Large (20k+ Enrollment),312,125000.00,115000.00,8.70
+110422,University of California-Davis,CA,38000,Large (20k+ Enrollment),268,120000.00,115000.00,4.35
+110538,University of California-Los Angeles,CA,45000,Large (20k+ Enrollment),325,128000.00,115000.00,11.30
+110644,California State University-Long Beach,CA,37000,Large (20k+ Enrollment),187,95000.00,115000.00,-17.39
+110662,California State University-Los Angeles,CA,27000,Large (20k+ Enrollment),142,92000.00,115000.00,-20.00
+110680,Stanford University,CA,16000,Medium (5k–20k Enrollment),245,145000.00,105000.00,38.10
+126614,University of Colorado Boulder,CO,35000,Large (20k+ Enrollment),198,98000.00,92000.00,6.52
+126818,Colorado State University,CO,32000,Large (20k+ Enrollment),176,94000.00,92000.00,2.17
+129020,University of Connecticut,CT,24000,Large (20k+ Enrollment),152,96000.00,94000.00,2.13
+130794,University of Delaware,DE,23000,Large (20k+ Enrollment),128,91000.00,88000.00,3.41
+133650,University of Florida,FL,52000,Large (20k+ Enrollment),312,99000.00,91000.00,8.79
+133951,Florida State University,FL,41000,Large (20k+ Enrollment),245,95000.00,91000.00,4.40
+134130,University of Central Florida,FL,68000,Large (20k+ Enrollment),278,93000.00,91000.00,2.20
+139755,University of Georgia,GA,38000,Large (20k+ Enrollment),234,97000.00,89000.00,8.99
+139959,Georgia Institute of Technology,GA,28000,Large (20k+ Enrollment),198,112000.00,89000.00,25.84
