@@ -6,18 +6,14 @@ WITH school_medians AS (
     carnegie.stabbr AS state,
     MAX(enroll.enrollment) AS enrollment,
     CASE
-      WHEN MAX(enroll.enrollment) < 5000 THEN 'Small (<5k Enrollment)'
-      WHEN MAX(enroll.enrollment) BETWEEN 5000 AND 20000 THEN 'Medium (5k–20k Enrollment)'
-      WHEN MAX(enroll.enrollment) > 20000 THEN 'Large (20k+ Enrollment)'
+      WHEN MAX(enroll.enrollment) < 5000 THEN 'Small (<5k)'
+      WHEN MAX(enroll.enrollment) BETWEEN 5000 AND 20000 THEN 'Medium (5k–20k)'
+      WHEN MAX(enroll.enrollment) > 20000 THEN 'Large (20k+)'
       ELSE 'Unknown'
     END AS enrollment_category,
     COUNT(DISTINCT employee.id) AS employee_count,
     PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY employee.fte_annualized_base_salary) AS median_salary
   FROM employee_details AS employee
-  LEFT JOIN departments AS depart
-    ON employee.department_id = depart.id
-  LEFT JOIN working_titles AS title
-    ON employee.working_title_id = title.id
   LEFT JOIN carnegie_institutions AS carnegie
     ON employee.institution_id = carnegie.id
   LEFT JOIN (
@@ -33,13 +29,14 @@ WITH school_medians AS (
   GROUP BY carnegie.unitid, carnegie.name, carnegie.stabbr
   HAVING COUNT(DISTINCT employee.id) > 15
 ),
-state_category_medians AS (
+category_medians AS (
   SELECT
-    state,
     enrollment_category,
-    PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY median_salary) AS state_category_median
+    COUNT(DISTINCT unitid) AS number_of_schools,
+    PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY median_salary) AS category_median_salary
   FROM school_medians
-  GROUP BY state, enrollment_category
+  WHERE enrollment_category IS NOT NULL
+  GROUP BY enrollment_category
 )
 SELECT
   s.unitid,
@@ -48,17 +45,18 @@ SELECT
   s.enrollment,
   s.enrollment_category,
   s.employee_count,
-  s.median_salary,
-  st.state_category_median AS state_median_salary,
+  ROUND(s.median_salary::numeric, 2) AS school_median_salary,
+  st.number_of_schools AS schools_in_category,
+  ROUND(st.category_median_salary::numeric, 2) AS category_median_salary,
   ROUND(
-    ((s.median_salary - st.state_category_median) / st.state_category_median * 100)::numeric,
+    ((s.median_salary - st.category_median_salary) / st.category_median_salary * 100)::numeric,
     2
-  ) AS percent_diff_from_state_category
+  ) AS percent_diff_from_category_median
 FROM school_medians s
-JOIN state_category_medians st
-  ON s.state = st.state
-  AND s.enrollment_category = st.enrollment_category
-ORDER BY s.state, s.enrollment_category, percent_diff_from_state_category DESC;
+JOIN category_medians st
+  ON s.enrollment_category = st.enrollment_category
+ORDER BY s.enrollment_category, percent_diff_from_category_median DESC;
+
 
 -- State
 WITH school_medians AS (

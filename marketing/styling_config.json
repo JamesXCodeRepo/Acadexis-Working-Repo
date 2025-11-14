@@ -1,0 +1,121 @@
+{
+  "colors": {
+    "background_primary": "#1a3a5c",
+    "background_secondary": "#2d5a7b",
+    "enrollment_small": "#7eb3d4",
+    "enrollment_large": "#4a1a8c",
+    "enrollment_medium": "#2563a8",
+    "text_primary": "#ffffff",
+    "text_secondary": "#e8f4f8",
+    "chart_background": "#f5f5f5",
+    "chart_border": "#cccccc",
+    "accent_line": "#5eb3d4",
+    "positive": "#2ecc71",
+    "negative": "#e74c3c"
+  },
+  "typography": {
+    "main_title": {
+      "size": 28,
+      "weight": "bold",
+      "family": "sans-serif",
+      "color": "text_primary"
+    },
+    "subtitle": {
+      "size": 14,
+      "weight": "normal",
+      "family": "sans-serif",
+      "color": "text_secondary"
+    },
+    "chart_title": {
+      "size": 16,
+      "weight": "bold",
+      "family": "sans-serif",
+      "color": "#333333"
+    },
+    "callout": {
+      "size": 12,
+      "weight": "normal",
+      "family": "sans-serif",
+      "color": "text_primary"
+    },
+    "statistics_label": {
+      "size": 10,
+      "weight": "bold",
+      "family": "sans-serif",
+      "color": "#333333"
+    },
+    "statistics_value": {
+      "size": 11,
+      "weight": "normal",
+      "family": "sans-serif",
+      "color": "#333333"
+    }
+  },
+  "layout": {
+    "page_width": 11,
+    "page_height": 8.5,
+    "margins": {
+      "top": 0.5,
+      "bottom": 0.3,
+      "left": 0.5,
+      "right": 0.5
+    },
+    "header_height_ratio": 0.12,
+    "footer_height_ratio": 0.06,
+    "content_height_ratio": 0.82,
+    "chart_width_ratio": 0.65,
+    "stats_width_ratio": 0.35,
+    "spacing_between_elements": 0.2
+  },
+  "chart": {
+    "background_color": "chart_background",
+    "border_color": "chart_border",
+    "border_radius": 0.15,
+    "border_width": 1,
+    "shadow_enabled": true,
+    "shadow_blur": 12,
+    "shadow_offset": 4,
+    "padding": 0.3,
+    "grid_enabled": true,
+    "grid_style": "--",
+    "grid_color": "#cccccc",
+    "grid_alpha": 0.3
+  },
+  "dumbbell_chart": {
+    "line_color_positive": "positive",
+    "line_color_negative": "negative",
+    "state_dot_color": "#95a5a6",
+    "school_dot_color": "#3498db",
+    "dot_size": 400,
+    "line_width": 3,
+    "line_alpha": 0.6
+  },
+  "statistics_box": {
+    "background_color": "chart_background",
+    "border_color": "chart_border",
+    "border_radius": 0.15,
+    "padding": 0.2,
+    "shadow_enabled": true
+  },
+  "header": {
+    "background_gradient": true,
+    "gradient_start": "background_primary",
+    "gradient_end": "background_secondary",
+    "text_color": "text_primary",
+    "alignment": "center"
+  },
+  "footer": {
+    "background_gradient": true,
+    "gradient_start": "background_primary",
+    "gradient_end": "background_secondary",
+    "text_color": "text_secondary",
+    "alignment": "center",
+    "text": "Acadexis Salary Benchmarking Report | Confidential"
+  },
+  "branding": {
+    "logo_enabled": false,
+    "logo_path": null,
+    "logo_position": "top_right",
+    "logo_width": 1.0
+  }
+}

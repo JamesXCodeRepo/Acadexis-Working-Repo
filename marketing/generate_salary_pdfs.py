@@ -4,15 +4,18 @@ Generate custom PDF salary reports per institution.
 
 This script fetches salary comparison data from an API and generates individual
 PDF reports for each institution, comparing school median salary against state
-median salary by enrollment category.
+median salary by enrollment category. Styling is applied from styling_config.json.
 """
 
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+from matplotlib.colors import LinearSegmentedColormap
+import numpy as np
 from pathlib import Path
 import sys
 import requests
+import json
 from datetime import datetime
 from typing import Dict, List, Optional
 
@@ -22,6 +25,45 @@ API_BASE_URL = "https://your-api-endpoint.com/api"  # TODO: Update with actual A
 API_ENDPOINTS = {
     'enrollment': '/salary-by-enrollment',  # TODO: Update with actual endpoint path
 }
+
+# Load styling configuration
+def load_styling_config() -> Dict:
+    """Load styling configuration from JSON file."""
+    script_dir = Path(__file__).parent
+    config_file = script_dir / 'styling_config.json'
+
+    if not config_file.exists():
+        print(f"Warning: Styling config not found at {config_file}, using defaults")
+        return get_default_config()
+
+    with open(config_file, 'r') as f:
+        return json.load(f)
+
+
+def get_default_config() -> Dict:
+    """Return default styling configuration."""
+    return {
+        "colors": {
+            "background_primary": "#1a3a5c",
+            "background_secondary": "#2d5a7b",
+            "text_primary": "#ffffff",
+            "text_secondary": "#e8f4f8",
+            "chart_background": "#f5f5f5",
+            "positive": "#2ecc71",
+            "negative": "#e74c3c"
+        }
+    }
+
+
+def resolve_color(color_key: str, config: Dict) -> str:
+    """Resolve color from config, handling both direct colors and references."""
+    if color_key.startswith('#'):
+        return color_key
+    return config['colors'].get(color_key, color_key)
+
+
+# Load config at module level
+STYLING_CONFIG = load_styling_config()
 
 
 def fetch_salary_data(endpoint_key: str = 'enrollment') -> Optional[pd.DataFrame]:
@@ -60,73 +102,131 @@ def fetch_salary_data(endpoint_key: str = 'enrollment') -> Optional[pd.DataFrame
         return None
 
 
-def add_header(fig, school_data: Dict):
+def add_header(fig, school_data: Dict, config: Dict):
     """
-    Add header section with school metadata.
+    Add header section with school metadata and gradient background.
 
     Args:
         fig: Matplotlib figure object
         school_data: Dictionary containing school information
+        config: Styling configuration dictionary
     """
-    # Add header as figure text (top of page)
-    fig.text(0.5, 0.95, school_data['school'],
-             ha='center', fontsize=16, fontweight='bold')
-    fig.text(0.5, 0.92,
+    colors = config['colors']
+    typography = config.get('typography', {})
+
+    # Create gradient background for header
+    header_ax = fig.add_axes([0, 0.88, 1, 0.12], frameon=False)
+    header_ax.set_xlim(0, 1)
+    header_ax.set_ylim(0, 1)
+    header_ax.axis('off')
+
+    # Draw gradient background
+    gradient = np.linspace(0, 1, 256).reshape(256, 1)
+    start_color = resolve_color(colors['background_primary'], config)
+    end_color = resolve_color(colors['background_secondary'], config)
+
+    # Create gradient
+    cmap = LinearSegmentedColormap.from_list('gradient', [start_color, end_color])
+    header_ax.imshow(gradient, aspect='auto', cmap=cmap, extent=[0, 1, 0, 1])
+
+    # Add text on gradient
+    main_title_style = typography.get('main_title', {})
+    subtitle_style = typography.get('subtitle', {})
+
+    fig.text(0.5, 0.97, school_data['school'],
+             ha='center', fontsize=main_title_style.get('size', 24),
+             fontweight=main_title_style.get('weight', 'bold'),
+             color=resolve_color(main_title_style.get('color', 'text_primary'), config))
+
+    fig.text(0.5, 0.93,
              f"State: {school_data['state']} | Enrollment: {school_data['enrollment']:,} ({school_data['enrollment_category']})",
-             ha='center', fontsize=10)
+             ha='center', fontsize=10, color=resolve_color(colors['text_secondary'], config))
+
     fig.text(0.5, 0.90,
              f"Employee Count: {school_data['employee_count']} | Report Generated: {datetime.now().strftime('%B %d, %Y')}",
-             ha='center', fontsize=9, style='italic', color='gray')
+             ha='center', fontsize=8, style='italic',
+             color=resolve_color(colors['text_secondary'], config))
 
 
-def add_footer(fig):
+def add_footer(fig, config: Dict):
     """
-    Add footer section to the PDF.
+    Add footer section to the PDF with gradient background.
 
     Args:
         fig: Matplotlib figure object
+        config: Styling configuration dictionary
     """
-    footer_text = "Acadexis Salary Benchmarking Report | Confidential"
-    fig.text(0.5, 0.02, footer_text,
-             ha='center', fontsize=8, style='italic', color='gray')
+    colors = config['colors']
+    footer_config = config.get('footer', {})
+
+    # Create gradient background for footer
+    footer_ax = fig.add_axes([0, 0, 1, 0.06], frameon=False)
+    footer_ax.set_xlim(0, 1)
+    footer_ax.set_ylim(0, 1)
+    footer_ax.axis('off')
+
+    # Draw gradient background
+    gradient = np.linspace(0, 1, 256).reshape(256, 1)
+    start_color = resolve_color(footer_config.get('gradient_start', 'background_primary'), config)
+    end_color = resolve_color(footer_config.get('gradient_end', 'background_secondary'), config)
+
+    cmap = LinearSegmentedColormap.from_list('footer_gradient', [start_color, end_color])
+    footer_ax.imshow(gradient, aspect='auto', cmap=cmap, extent=[0, 1, 0, 1])
+
+    # Add footer text
+    footer_text = footer_config.get('text', 'Acadexis Salary Benchmarking Report | Confidential')
+    fig.text(0.5, 0.03, footer_text,
+             ha='center', fontsize=7, style='italic',
+             color=resolve_color(footer_config.get('text_color', 'text_secondary'), config))
 
 
-def create_salary_comparison_chart(ax, school_data: Dict):
+def create_salary_comparison_chart(ax, school_data: Dict, config: Dict):
     """
     Create a dumbbell (lollipop) chart comparing school median salary vs state median salary.
 
     Args:
         ax: Matplotlib axis object
         school_data: Dictionary containing salary comparison data
+        config: Styling configuration dictionary
     """
     school_salary = school_data['median_salary']
     state_salary = school_data['state_median_salary']
     percent_diff = school_data['percent_diff_from_state_category']
 
+    colors = config['colors']
+    dumbbell_config = config.get('dumbbell_chart', {})
+    chart_config = config.get('chart', {})
+    typography = config.get('typography', {})
+
     # Determine colors based on performance
     school_above = school_salary > state_salary
-    line_color = '#2ecc71' if school_above else '#e74c3c'  # Green if above, red if below
-    school_color = '#3498db'  # Blue for school
-    state_color = '#95a5a6'   # Gray for state
+    line_color = resolve_color(dumbbell_config.get('line_color_positive', 'positive'), config) \
+                 if school_above else \
+                 resolve_color(dumbbell_config.get('line_color_negative', 'negative'), config)
+    school_color = resolve_color(dumbbell_config.get('school_dot_color', '#3498db'), config)
+    state_color = resolve_color(dumbbell_config.get('state_dot_color', '#95a5a6'), config)
 
     # Y position for the dumbbell
     y_pos = 0.5
 
     # Draw the connecting line (dumbbell bar)
     ax.plot([state_salary, school_salary], [y_pos, y_pos],
-            color=line_color, linewidth=3, zorder=1, alpha=0.6)
+            color=line_color,
+            linewidth=dumbbell_config.get('line_width', 3),
+            zorder=1, alpha=dumbbell_config.get('line_alpha', 0.6))
 
     # Draw the dots (lollipop ends)
-    ax.scatter([state_salary], [y_pos], s=400, color=state_color,
-               zorder=2, edgecolors='black', linewidth=2, label='State Median')
-    ax.scatter([school_salary], [y_pos], s=400, color=school_color,
-               zorder=2, edgecolors='black', linewidth=2, label='School Median')
+    ax.scatter([state_salary], [y_pos], s=dumbbell_config.get('dot_size', 400),
+               color=state_color, zorder=2, edgecolors='black', linewidth=2, label='State Median')
+    ax.scatter([school_salary], [y_pos], s=dumbbell_config.get('dot_size', 400),
+               color=school_color, zorder=2, edgecolors='black', linewidth=2, label='School Median')
 
     # Add value labels on the dots
+    value_style = typography.get('statistics_value', {})
     ax.text(state_salary, y_pos + 0.15, f'${state_salary:,.0f}',
-            ha='center', va='bottom', fontsize=11, fontweight='bold')
+            ha='center', va='bottom', fontsize=value_style.get('size', 11), fontweight='bold')
     ax.text(school_salary, y_pos + 0.15, f'${school_salary:,.0f}',
-            ha='center', va='bottom', fontsize=11, fontweight='bold')
+            ha='center', va='bottom', fontsize=value_style.get('size', 11), fontweight='bold')
 
     # Add labels below the dots
     ax.text(state_salary, y_pos - 0.15, 'State\nMedian',
@@ -137,18 +237,29 @@ def create_salary_comparison_chart(ax, school_data: Dict):
     # Customize chart
     ax.set_ylim(0, 1)
     ax.set_yticks([])  # Hide y-axis ticks
-    ax.set_xlabel('Annual Salary ($)', fontsize=12, fontweight='bold')
+
+    chart_title_style = typography.get('chart_title', {})
+    ax.set_xlabel('Annual Salary ($)', fontsize=chart_title_style.get('size', 12),
+                  fontweight=chart_title_style.get('weight', 'bold'))
     ax.set_title('Median Salary Comparison', fontsize=14, fontweight='bold', pad=20)
-    ax.grid(axis='x', alpha=0.3, linestyle='--')
+
+    if chart_config.get('grid_enabled', True):
+        ax.grid(axis='x', alpha=chart_config.get('grid_alpha', 0.3),
+                linestyle=chart_config.get('grid_style', '--'),
+                color=chart_config.get('grid_color', '#cccccc'))
+
     ax.spines['left'].set_visible(False)
     ax.spines['right'].set_visible(False)
     ax.spines['top'].set_visible(False)
+    ax.spines['bottom'].set_color(resolve_color(chart_config.get('border_color', '#cccccc'), config))
 
     # Format x-axis as currency
     ax.xaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'${x:,.0f}'))
 
     # Add percentage difference annotation
-    diff_color = 'green' if percent_diff >= 0 else 'red'
+    diff_color = resolve_color(colors.get('positive', '#2ecc71'), config) \
+                 if percent_diff >= 0 else \
+                 resolve_color(colors.get('negative', '#e74c3c'), config)
     diff_symbol = '+' if percent_diff >= 0 else ''
     diff_text = f'{diff_symbol}{percent_diff:.2f}% vs State Median'
 
@@ -161,17 +272,25 @@ def create_salary_comparison_chart(ax, school_data: Dict):
                      edgecolor=diff_color, linewidth=2.5))
 
 
-def generate_pdf_report(school_data: Dict, output_dir: Path) -> Path:
+def generate_pdf_report(school_data: Dict, output_dir: Path, config: Dict = None) -> Path:
     """
     Generate a PDF report for a single school with salary comparison.
 
     Args:
         school_data: Dictionary containing school salary and metadata
         output_dir: Directory to save the PDF
+        config: Styling configuration dictionary (uses STYLING_CONFIG if None)
 
     Returns:
         Path to the generated PDF file
     """
+    if config is None:
+        config = STYLING_CONFIG
+
+    colors = config['colors']
+    stats_box_config = config.get('statistics_box', {})
+    typography = config.get('typography', {})
+
     # Create figure with custom layout
     fig = plt.figure(figsize=(11, 8.5))  # Letter size
 
@@ -180,21 +299,24 @@ def generate_pdf_report(school_data: Dict, output_dir: Path) -> Path:
                                hspace=0.3, top=0.88, bottom=0.08,
                                left=0.1, right=0.9)
 
-    # Add header
-    add_header(fig, school_data)
+    # Add header with styling
+    add_header(fig, school_data, config)
 
     # Create a nested grid for the middle section: chart on left, stats on right
     gs_middle = gs_main[1, 0].subgridspec(1, 2, width_ratios=[2.5, 1], wspace=0.3)
 
     # Create main chart area (left side)
     ax_chart = fig.add_subplot(gs_middle[0, 0])
-    create_salary_comparison_chart(ax_chart, school_data)
+    create_salary_comparison_chart(ax_chart, school_data, config)
 
     # Create statistics box area (right side)
     ax_stats = fig.add_subplot(gs_middle[0, 1])
     ax_stats.axis('off')  # Hide axis
 
     # Add statistics text
+    stats_label_style = typography.get('statistics_label', {})
+    stats_value_style = typography.get('statistics_value', {})
+
     stats_text = f"""Salary Statistics
 ━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -217,13 +339,20 @@ Sample Size:
 {school_data['employee_count']} employees
 """
 
+    stats_bg_color = resolve_color(stats_box_config.get('background_color', 'chart_background'), config)
+    stats_border_color = resolve_color(stats_box_config.get('border_color', 'chart_border'), config)
+
     ax_stats.text(0.1, 0.5, stats_text,
                   transform=ax_stats.transAxes,
-                  fontsize=10, verticalalignment='center',
-                  bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8, pad=1))
+                  fontsize=stats_value_style.get('size', 10),
+                  verticalalignment='center',
+                  color=resolve_color(stats_value_style.get('color', '#333333'), config),
+                  bbox=dict(boxstyle='round', facecolor=stats_bg_color,
+                           edgecolor=stats_border_color, linewidth=1.5,
+                           alpha=0.9, pad=1))
 
-    # Add footer
-    add_footer(fig)
+    # Add footer with styling
+    add_footer(fig, config)
 
     # Create safe filename
     safe_school = school_data['school'].replace(' ', '_').replace('/', '_').replace(',', '')
@@ -339,7 +468,7 @@ def main():
         # Generate PDF
         print(f"[{idx + 1}/{total_schools}] Generating report: {school_data['school']} ({school_data['state']})")
         try:
-            filepath = generate_pdf_report(school_data, output_dir)
+            filepath = generate_pdf_report(school_data, output_dir, STYLING_CONFIG)
             generated_files.append(filepath)
         except Exception as e:
             print(f"  [ERROR] Error generating report for {school_data['school']}: {e}")
