@@ -1,0 +1,339 @@
+{
+  "agents": {
+    "planner": {
+      "name": "Planner",
+      "role": "planner",
+      "description": "Transform vague requests into clear, testable specifications. Eliminate ambiguity before design and implementation.",
+      "input": {
+        "task": {
+          "type": "Task",
+          "description": "Task object with id, type, title, raw description, metadata"
+        },
+        "project_standards": {
+          "type": "array",
+          "description": "Architecture guide, security guide, and similar documentation"
+        },
+        "context": {
+          "type": "string",
+          "description": "Any prior context or linked issues"
+        }
+      },
+      "output": {
+        "type": "Artifact",
+        "artifact_type": "spec",
+        "fields": {
+          "problem_statement": "1-2 sentences describing the problem",
+          "functional_requirements": "Bulleted list of must-haves",
+          "non_functional_requirements": "Performance, security, UX, scalability requirements",
+          "acceptance_criteria": "5-10 testable items including failure cases",
+          "scope_boundaries": "What is explicitly NOT included",
+          "risks_and_dependencies": "Known blockers and external dependencies",
+          "effort_estimate": "S/M/L"
+        }
+      },
+      "tools_available": [
+        "ReadOnlyCodebaseAdapter",
+        "ReadOnlyProjectStandards"
+      ],
+      "validation_rules": [
+        "Acceptance criteria are testable (measurable, not subjective)",
+        "At least one negative/failure case included",
+        "No implementation details (no 'use Redis' or 'call endpoint X')",
+        "All ambiguities flagged or resolved",
+        "Effort estimate provided"
+      ],
+      "handoff_criteria": {
+        "pass": {
+          "condition": "All validation rules met",
+          "next_agent": "architect"
+        },
+        "fail": {
+          "condition": "Validation fails",
+          "action": "Output spec artifact flagged as 'needs_human', wait for clarification"
+        }
+      },
+      "failure_handling": [
+        "If spec incomplete (< 3 acceptance criteria): ask for more details",
+        "If conflicting requirements: call out contradictions, wait for human"
+      ]
+    },
+    "architect": {
+      "name": "Architect",
+      "role": "architect",
+      "description": "Design solutions that fit the existing system. Balance correctness, maintainability, and simplicity.",
+      "input": {
+        "spec_artifact": {
+          "type": "Artifact",
+          "artifact_type": "spec",
+          "description": "Output from Planner"
+        },
+        "codebase": {
+          "type": "CodebaseSnapshot",
+          "description": "Project structure and existing code (read-only)"
+        },
+        "project_standards": {
+          "type": "array",
+          "description": "Architecture, naming conventions, patterns"
+        }
+      },
+      "output": {
+        "type": "Artifact",
+        "artifact_type": "design",
+        "fields": {
+          "high_level_approach": "1-2 paragraphs explaining the approach",
+          "files_to_modify_or_create": "List of file paths with actions (create/modify/delete)",
+          "data_model_changes": "Before/after if applicable",
+          "api_or_interface_changes": "New or modified interfaces",
+          "trade_offs": "Why this approach was chosen over alternatives",
+          "breaking_changes": "Explicitly list any breaking changes or migrations",
+          "performance_and_security_implications": "Key considerations"
+        }
+      },
+      "tools_available": [
+        "ReadOnlyCodebaseAdapter (readFile, listFiles, search, diff)",
+        "ReadOnlyProjectStandards"
+      ],
+      "validation_rules": [
+        "Design respects existing architecture and patterns",
+        "Changes are minimal and focused (no unnecessary rewrites)",
+        "File paths are valid (exist or clearly new)",
+        "Breaking changes explicitly flagged",
+        "Trade-offs documented (at least one alternative considered)"
+      ],
+      "handoff_criteria": {
+        "pass": {
+          "condition": "All validation rules met",
+          "next_agent": "coder"
+        },
+        "fail": {
+          "condition": "Design violates architecture or is overly complex",
+          "action": "Output design flagged as 'needs_human'"
+        }
+      },
+      "failure_handling": [
+        "If proposed files unjustified: ask for clarification",
+        "If design contradicts standards: flag and let human decide"
+      ]
+    },
+    "coder": {
+      "name": "Coder",
+      "role": "coder",
+      "description": "Write production-ready code. Quality means correctness, clarity, and maintainability.",
+      "input": {
+        "spec_artifact": {
+          "type": "Artifact",
+          "artifact_type": "spec"
+        },
+        "design_artifact": {
+          "type": "Artifact",
+          "artifact_type": "design"
+        },
+        "codebase": {
+          "type": "CodebaseSnapshot",
+          "description": "Full read/write access"
+        },
+        "project_config": {
+          "type": "ProjectConfig",
+          "description": "Test, lint, and build commands"
+        }
+      },
+      "output": [
+        {
+          "type": "Artifact",
+          "artifact_type": "patch",
+          "fields": {
+            "modified_files": "List of files changed",
+            "summary_per_file": "What changed and why",
+            "commit_messages": "Clear, focused commit history"
+          }
+        },
+        {
+          "type": "Artifact",
+          "artifact_type": "note",
+          "fields": {
+            "implementation_overview": "What was built",
+            "tests_added_or_modified": "Test coverage details",
+            "manual_testing_steps": "If applicable",
+            "known_limitations_or_todos": "Deferred work, if any"
+          }
+        }
+      ],
+      "tools_available": [
+        "CodebaseAdapter (readFile, writeFile, listFiles, search, createBranch, diff)",
+        "CommandRunner (test, lint, build)"
+      ],
+      "validation_rules": [
+        "All tests pass (no failures, no skips)",
+        "Linter passes with zero errors (warnings justified)",
+        "Build succeeds",
+        "Test coverage doesn't decrease",
+        "Changes are minimal; no extraneous refactoring",
+        "Error handling present (input validation, try/catch, etc.)"
+      ],
+      "handoff_criteria": {
+        "pass": {
+          "condition": "All validation rules met",
+          "next_agent": "reviewer"
+        },
+        "fail": {
+          "condition": "Tests fail, linter fails, or coverage drops",
+          "action": "Loop back to Coder, fix issues, rerun validation"
+        }
+      },
+      "failure_handling": [
+        "Test fails: Re-read test, analyze error, fix code, rerun (max 3 attempts)",
+        "Lint fails: Fix errors, rerun",
+        "Build fails: Fix compilation issues, rerun",
+        "Stuck after 3 attempts: Flag as 'blocked', output current state, let human debug"
+      ]
+    },
+    "reviewer": {
+      "name": "Reviewer",
+      "role": "reviewer",
+      "description": "Guard quality and consistency. Catch issues before they reach production.",
+      "input": {
+        "spec_artifact": {
+          "type": "Artifact",
+          "artifact_type": "spec"
+        },
+        "design_artifact": {
+          "type": "Artifact",
+          "artifact_type": "design"
+        },
+        "patch_artifact": {
+          "type": "Artifact",
+          "artifact_type": "patch"
+        },
+        "coder_notes": {
+          "type": "Artifact",
+          "artifact_type": "note"
+        },
+        "project_standards": {
+          "type": "array",
+          "description": "Style guide, security guide, architecture guide"
+        }
+      },
+      "output": {
+        "type": "Artifact",
+        "artifact_type": "review",
+        "fields": {
+          "verdict": "'approve' or 'request_changes'",
+          "feedback": {
+            "correctness": "Logic, edge cases, error handling",
+            "tests": "Coverage, meaningful assertions",
+            "security": "Input validation, injection, auth",
+            "performance": "Inefficiencies, scalability issues",
+            "style_and_readability": "Naming, complexity, comments",
+            "architecture": "Adherence to patterns, dependencies"
+          },
+          "line_by_line_comments": "Specific suggestions or required fixes",
+          "blockers_vs_suggestions": "Must-fix vs. nice-to-have"
+        }
+      },
+      "tools_available": [
+        "ReadOnlyCodebaseAdapter (readFile, search, diff)",
+        "ReadOnlyProjectStandards"
+      ],
+      "validation_rules": [
+        "Logic is correct; edge cases handled",
+        "Error paths are tested",
+        "Security checklist passed (OWASP top 10, auth, validation)",
+        "Tests are meaningful (verify behavior, not just coverage)",
+        "Code follows project style and conventions",
+        "No performance red flags"
+      ],
+      "handoff_criteria": {
+        "pass": {
+          "condition": "All validation rules met",
+          "next_agent": "ops"
+        },
+        "fail": {
+          "condition": "Blockers found",
+          "action": "Output review with feedback, wait for human or loop back to Coder"
+        }
+      },
+      "failure_handling": [
+        "If unsure of severity: Flag as 'needs_human', wait",
+        "After 2 'request_changes' cycles: Escalate to human for decision"
+      ]
+    },
+    "ops": {
+      "name": "Ops",
+      "role": "ops",
+      "description": "Safely move code to production. Reliability and observability are non-negotiable.",
+      "input": {
+        "spec_artifact": {
+          "type": "Artifact",
+          "artifact_type": "spec"
+        },
+        "approved_patch": {
+          "type": "Artifact",
+          "artifact_type": "patch",
+          "description": "Approved by Reviewer"
+        },
+        "project_config": {
+          "type": "ProjectConfig",
+          "description": "Deployment config, CI/CD setup"
+        },
+        "ci_cd_status": {
+          "type": "object",
+          "description": "Current CI/CD pipeline status"
+        }
+      },
+      "output": {
+        "type": "Artifact",
+        "artifact_type": "deployment",
+        "fields": {
+          "deployment_plan": "Steps, sequence, rollback procedure",
+          "pre_deployment_checklist": "CI passed, monitoring ready, etc.",
+          "what_changed": "Files modified, new services, etc.",
+          "verification_steps": "Manual tests, health checks, monitoring queries",
+          "ci_and_monitoring_links": "Logs, dashboards, rollback docs",
+          "post_deployment_notes": "What to monitor, expected metrics, rollback triggers"
+        }
+      },
+      "tools_available": [
+        "CommandRunner (trigger deployments, check CI status)",
+        "CiCdAdapter (getPipelineStatus, triggerPipeline)",
+        "ReadOnlyCodebaseAdapter (for reference)"
+      ],
+      "validation_rules": [
+        "CI/CD pipeline fully passed (no failures)",
+        "Deployment plan is clear and testable",
+        "Rollback procedure is documented and feasible",
+        "Monitoring/alerting rules are in place",
+        "No direct pushes to production without approval"
+      ],
+      "handoff_criteria": {
+        "pass": {
+          "condition": "All validation rules met",
+          "action": "Mark as ready for human execution"
+        },
+        "fail": {
+          "condition": "CI failed or deployment plan incomplete",
+          "action": "Flag as 'blocked', wait for fixes"
+        }
+      },
+      "failure_handling": [
+        "If CI fails: Don't proceed. Report to human; loop to Coder if needed",
+        "If monitoring not configured: Don't deploy. Escalate to set up alerts",
+        "If rollback untestable: Don't deploy. Flag as 'needs_human'"
+      ]
+    }
+  },
+  "workflow_handoff": {
+    "sequence": [
+      "planner",
+      "architect",
+      "coder",
+      "reviewer",
+      "ops",
+      "done"
+    ],
+    "failure_loops": {
+      "coder": "Retries up to 3 times on validation failure, then escalates to human",
+      "reviewer": "After 2 'request_changes' cycles, escalates to human",
+      "ops": "Blocks on CI failure or missing monitoring, waits for human"
+    }
+  }
+}
